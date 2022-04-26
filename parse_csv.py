@@ -69,7 +69,7 @@ def _pack_best_value(path: str, out_file: str)-> None:
     for pos, arr in d_arr.items():
         out_file_name = out_file + f'_{pos}.py'
         size, out_arr = _calc_str_arr(arr)
-        _MAX = 1024*1024 * 20
+        _MAX = 1024*1024
         if size < _MAX:
             _write_file(out_arr, out_file_name)
             return
@@ -105,6 +105,6 @@ def parse_all_files(path: str, out_dir: str)-> None:
         print(filenames, out_dir)
 
 
-# parse_all_files('/Users/a1/gpu/dataset/mortgage_2000-2001/acq/*', '/Users/a1/gpu/dataset/out/')
-parse_all_files('/Users/a1/gpu/dataset/mortgage_2000-2001/perf/Performance_2001*', '/Users/a1/gpu/dataset/out/')
+parse_all_files('/Users/a1/gpu/dataset/mortgage_2000-2001/acq/*', '/Users/a1/gpu/dataset/out/')
+parse_all_files('/Users/a1/gpu/dataset/mortgage_2000-2001/perf/*', '/Users/a1/gpu/dataset/out/')
 
