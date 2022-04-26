@@ -119,3 +119,7 @@ delimiter = ','
 # parse_all_files('/Users/a1/gpu/dataset/Walmart/*', '/Users/a1/gpu/dataset/out/')
 
 parse_all_files('/Users/a1/gpu/dataset/covid19/*', '/Users/a1/gpu/dataset/out/')
+parse_all_files('/Users/a1/gpu/dataset/india/*', '/Users/a1/gpu/dataset/out/')
+parse_all_files('/Users/a1/gpu/dataset/car/*', '/Users/a1/gpu/dataset/out/')
+parse_all_files('/Users/a1/gpu/dataset/brazil/*', '/Users/a1/gpu/dataset/out/')
+
