@@ -12,20 +12,26 @@ def _try_parse(value: str)-> int:
     except:
         return None
 
+delimiter = None
 
 def _parse_file(path: str)-> dict:
+    global delimiter
     d_arr = {}
     with open(path) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter='|')
-        for row in csv_reader:
-            for pos, value in enumerate(row):
-                ret = _try_parse(value)
-                if ret is None:
-                    continue
-                if pos in d_arr:
-                    d_arr[pos].append(ret)
-                else:
-                    d_arr[pos] = [ret]
+        try:
+            csv_reader = csv.reader(csv_file, delimiter=delimiter)
+            for row in csv_reader:
+                for pos, value in enumerate(row):
+                    ret = _try_parse(value)
+                    if ret is None:
+                        continue
+                    if pos in d_arr:
+                        d_arr[pos].append(ret)
+                    else:
+                        d_arr[pos] = [ret]
+        except Exception as e:
+            print("can't parse:")
+            print(repr(e))
     return d_arr
 
 
@@ -105,6 +111,11 @@ def parse_all_files(path: str, out_dir: str)-> None:
         print(filenames, out_dir)
 
 
-parse_all_files('/Users/a1/gpu/dataset/mortgage_2000-2001/acq/*', '/Users/a1/gpu/dataset/out/')
-parse_all_files('/Users/a1/gpu/dataset/mortgage_2000-2001/perf/*', '/Users/a1/gpu/dataset/out/')
+delimiter = '|'
+# parse_all_files('/Users/a1/gpu/dataset/mortgage_2000-2001/acq/*', '/Users/a1/gpu/dataset/out/')
+# parse_all_files('/Users/a1/gpu/dataset/mortgage_2000-2001/perf/*', '/Users/a1/gpu/dataset/out/')
 
+delimiter = ','
+# parse_all_files('/Users/a1/gpu/dataset/Walmart/*', '/Users/a1/gpu/dataset/out/')
+
+parse_all_files('/Users/a1/gpu/dataset/covid19/*', '/Users/a1/gpu/dataset/out/')
