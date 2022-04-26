@@ -26,26 +26,27 @@ class Compress:
         self.test2 = self.comp_lib.test2
 
         self.comp_lib.nv_compress.restype = ctypes.c_size_t
-        self.comp_lib.nv_compress.argtypes = [ctypes.c_void_p, ctypes.c_size_t, ctypes.c_int, ctypes.c_int, ctypes.c_bool, ctypes.c_int]
+        self.comp_lib.nv_compress.argtypes = [ctypes.c_void_p, ctypes.c_size_t, ctypes.c_int, ctypes.c_int, ctypes.c_bool, ctypes.c_int, ctypes.c_int]
 
         self._compress_api = self.comp_lib.nv_compress
 
 
     class TestCase:
-        def __init__(self, rle: int, delta: int, m2delta: bool, bp: int):
+        def __init__(self, rle: int, delta: int, m2delta: bool, bp: int, chunk_size: int):
             self.rle = rle
             self.delta = delta
             self.m2delta = m2delta
             self.bp = bp
+            self.chunk_size = chunk_size
             self.result = None
             self.file_name = None
             self.bytes = None
 
         def __str__(self):
-            return f"rle: {self.rle}, delta: {self.delta}, m2: {self.m2delta}, bp: {self.bp}"
+            return f"rle: {self.rle}, delta: {self.delta}, m2: {self.m2delta}, bp: {self.bp}, chunk_size: {self.chunk_size}"
 
         def case(self)-> str:
-            return f"{self.rle}/{self.delta}/{self.bp}"
+            return f"{self.rle}/{self.delta}/{self.bp}/{self.chunk_size}"
 
     def test(self):
         print('comp_lib.test(MortgageData2000): ', self.test1(1))
@@ -60,7 +61,7 @@ class Compress:
         for i in range(40):
             data.append(i%32)
 
-        opt = self.TestCase(0, 1, True, 1)
+        opt = self.TestCase(0, 1, True, 1, 4096)
 
         self._test_data(data)
 
@@ -73,7 +74,7 @@ class Compress:
         lenthg = len(data)
         ptr = (d_types[bytes] * lenthg)(*data)
         # print(ptr)
-        ret = self._compress_api(ptr, lenthg, bytes, opt.rle, opt.delta, opt.m2delta, opt.bp)
+        ret = self._compress_api(ptr, lenthg, bytes, opt.rle, opt.delta, opt.m2delta, opt.bp, opt.chunk_size)
         # print("ret", ret)
         return ret
 
@@ -82,11 +83,12 @@ class Compress:
         test_case_results = []
         for rle in range(0, 3):
             for delta in range(1, 4):
-                for m2_delta in (True, False):
-                    opt = self.TestCase(rle, delta, m2_delta, 1)
-                    opt.result = self._compress(data, bytes, opt)
-                    opt.bytes = bytes
-                    test_case_results.append(opt)
+                for chunk_size in (512, 1024, 1024*2, 4096, 4096*2, 4096*3, 4096*4):
+                    for m2_delta in (True, False):
+                        opt = self.TestCase(rle, delta, m2_delta, 1, chunk_size)
+                        opt.result = self._compress(data, bytes, opt)
+                        opt.bytes = bytes
+                        test_case_results.append(opt)
         return test_case_results
 
     @staticmethod
@@ -159,7 +161,8 @@ debug = False
 
 compress = Compress(path, debug)
 
-if debug:
-    compress.test()
+# compress.test()
 
+print("start")
 compress.test_all_files()
+print("done")
