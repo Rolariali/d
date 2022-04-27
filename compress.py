@@ -50,7 +50,7 @@ class Compress:
             return f"rle: {self.rle}, delta: {self.delta}, m2: {self.m2delta}, bp: {self.bp}, chunk_size: {self.chunk_size}"
 
         def case(self)-> str:
-            return f"{self.rle}/{self.delta}/{self.bp}/{self.chunk_size}/b{self.bytes}"
+            return f"{self.rle}/{self.delta}/{self.bp}/{self.chunk_size:05d}/b{self.bytes}"
 
     def test(self):
         print('comp_lib.test(MortgageData2000): ', self.test1(1))
@@ -140,7 +140,7 @@ class Compress:
     def log(self, s: str):
         print(s)
         s += "\n"
-        with open(self.log_file, 'w') as f:
+        with open(self.log_file, 'a') as f:
             f.write(s)
 
 
