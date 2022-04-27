@@ -30,8 +30,9 @@ class Compress:
         self.test2 = self.comp_lib.test2
 
         self.comp_lib.nv_compress.restype = ctypes.c_size_t
-        self.comp_lib.nv_compress.argtypes = [ctypes.c_void_p, ctypes.c_size_t, ctypes.c_int, ctypes.c_int,
-                                              ctypes.c_bool, ctypes.c_int, ctypes.c_int, ctypes.c_bool]
+        self.comp_lib.nv_compress.argtypes = [ctypes.c_void_p, ctypes.c_size_t, ctypes.c_int, # data, size, bytes
+                                              ctypes.c_int, ctypes.c_bool, ctypes.c_int, # rle, delta, m2delta
+                                              ctypes.c_int, ctypes.c_int, ctypes.c_bool] # bp, chunk_size , verify_decompress
 
         self._compress_api = self.comp_lib.nv_compress
 
