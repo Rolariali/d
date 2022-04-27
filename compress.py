@@ -138,6 +138,11 @@ class Compress:
                 test_case_results = self._test_for_file(file)
                 d_test_case_results[file] = test_case_results
                 self._show_stat(file, test_case_results)
+
+                import shutil
+                src_path = f"out/{file}"
+                # print("move", src_path)
+                shutil.move(src_path, 't')
         return d_test_case_results
 
 
