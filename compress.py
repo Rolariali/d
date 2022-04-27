@@ -30,13 +30,14 @@ class Compress:
         self.test2 = self.comp_lib.test2
 
         self.comp_lib.nv_compress.restype = ctypes.c_size_t
-        self.comp_lib.nv_compress.argtypes = [ctypes.c_void_p, ctypes.c_size_t, ctypes.c_int, ctypes.c_int, ctypes.c_bool, ctypes.c_int, ctypes.c_int]
+        self.comp_lib.nv_compress.argtypes = [ctypes.c_void_p, ctypes.c_size_t, ctypes.c_int, ctypes.c_int,
+                                              ctypes.c_bool, ctypes.c_int, ctypes.c_int, ctypes.c_bool]
 
         self._compress_api = self.comp_lib.nv_compress
 
 
     class TestCase:
-        def __init__(self, rle: int, delta: int, m2delta: bool, bp: int, chunk_size: int):
+        def __init__(self, rle: int, delta: int, m2delta: bool, bp: int, chunk_size: int, verify_decompress: bool = False):
             self.rle = rle
             self.delta = delta
             self.m2delta = m2delta
@@ -45,6 +46,7 @@ class Compress:
             self.result = None
             self.file_name = None
             self.bytes = None
+            self.verify_decompress = verify_decompress
 
         def __str__(self):
             return f"rle: {self.rle}, delta: {self.delta}, m2: {self.m2delta}, bp: {self.bp}, chunk_size: {self.chunk_size}"
@@ -65,7 +67,7 @@ class Compress:
         for i in range(40):
             data.append(i%32)
 
-        opt = self.TestCase(0, 1, True, 1, 4096)
+        opt = self.TestCase(0, 1, True, 1, 4096, True)
 
         self._test_data(data)
 
@@ -78,7 +80,8 @@ class Compress:
         lenthg = len(data)
         ptr = (d_types[bytes] * lenthg)(*data)
         # print(ptr)
-        ret = self._compress_api(ptr, lenthg, bytes, opt.rle, opt.delta, opt.m2delta, opt.bp, opt.chunk_size)
+        ret = self._compress_api(ptr, lenthg, bytes, opt.rle, opt.delta,
+                                 opt.m2delta, opt.bp, opt.chunk_size, opt.verify_decompress)
         # print("ret", ret)
         return ret
 
