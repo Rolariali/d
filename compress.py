@@ -14,7 +14,7 @@ class Compress:
     def __init__(self, path: str, debug=False):
         self.debug = debug
         now = datetime.now()
-        dt_string = now.strftime("%m.%Y.%H.%M.%S")
+        dt_string = now.strftime("%d.%m.%Y.%H.%M.%S")
         self.log_file = dt_string + ".log"
         if(self.debug):
             self._compress_api = mock_compress
