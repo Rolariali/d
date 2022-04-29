@@ -15,7 +15,7 @@ class Compress:
         self.debug = debug
         now = datetime.now()
         dt_string = now.strftime("%d.%m.%Y.%H.%M.%S")
-        self.log_file = dt_string + ".log"
+        self.csv_file = "results.csv"
         if(self.debug):
             self._compress_api = mock_compress
             return
@@ -45,7 +45,7 @@ class Compress:
             self.bp = bp
             self.chunk_size = chunk_size
             self.result = None
-            self.file_name = None
+            # self.file_name = None
             self.bytes = None
             self.verify_decompress = verify_decompress
 
@@ -130,11 +130,18 @@ class Compress:
         test_case_results = self._test_data(data)
         return test_case_results
 
+    @staticmethod
+    def _check_ready_file(file: str)-> bool:
+        files = os.listdir("t")
+        return file in files
+
 
     def test_all_files(self)-> dict:
         d_test_case_results = {}
         for (root, dirs, files) in os.walk("out"):
             for file in files:
+                if self._check_ready_file(file):
+                    continue
                 test_case_results = self._test_for_file(file)
                 d_test_case_results[file] = test_case_results
                 self._show_stat(file, test_case_results)
@@ -142,33 +149,34 @@ class Compress:
                 import shutil
                 src_path = f"out/{file}"
                 # print("move", src_path)
-                shutil.move(src_path, 't')
+                shutil.move(src_path, "t")
         return d_test_case_results
 
 
-    def log(self, s: str):
-        print(s)
+    def log_result(self, name: str, opt: TestCase):
+        s = f"{name},{opt.rle},{opt.delta},{opt.m2delta},{opt.bp},{opt.chunk_size},{opt.bytes},{opt.result}"
+        # print(s)
         s += "\n"
-        with open(self.log_file, 'a') as f:
+        with open(self.csv_file, 'a') as f:
             f.write(s)
 
 
     def _show_stat(self, name: str, test_case_results: list):
         d_test_case = {}
         for res in test_case_results:
+            self.log_result(name, res)
             case_name = res.case()
             d_test_case[case_name] = {}
         for res in test_case_results:
             case_name = res.case()
             d_test_case[case_name][res.m2delta] = res.result
-        self.log(f"{name}")
-        self.log("----"*33)
+        print(f"{name}")
+        print("----"*33)
         for case, result in d_test_case.items():
             m2_result = result[True]
             commom_result = result[False]
             proc = (m2_result/commom_result)*100
-
-            self.log(f"{case} : \t{m2_result}\t\t{commom_result}\t\t{proc:.2f}%")
+            print(f"{case}:\t{m2_result}\t\t{commom_result}\t\t{proc:.2f}%")
 
 
 
