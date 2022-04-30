@@ -123,3 +123,10 @@ parse_all_files('/Users/a1/gpu/dataset/india/*', '/Users/a1/gpu/dataset/out/')
 parse_all_files('/Users/a1/gpu/dataset/car/*', '/Users/a1/gpu/dataset/out/')
 parse_all_files('/Users/a1/gpu/dataset/brazil/*', '/Users/a1/gpu/dataset/out/')
 
+parse_all_files('/Users/a1/gpu/dataset/powerlifting/*', '/Users/a1/gpu/dataset/out/')
+parse_all_files('/Users/a1/gpu/dataset/mobile-internet-speed-india/*', '/Users/a1/gpu/dataset/out/')
+parse_all_files('/Users/a1/gpu/dataset/fifa-player-stats-database/*', '/Users/a1/gpu/dataset/out/')
+parse_all_files('/Users/a1/gpu/dataset/Ethereum/*', '/Users/a1/gpu/dataset/out/')
+parse_all_files('/Users/a1/gpu/dataset/ecommerce-bookstore-dataset/*', '/Users/a1/gpu/dataset/out/')
+parse_all_files('/Users/a1/gpu/dataset/airlinedelaycauses/*', '/Users/a1/gpu/dataset/out/')
+
